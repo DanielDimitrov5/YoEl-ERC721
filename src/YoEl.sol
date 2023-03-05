@@ -7,9 +7,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 
-error RandomIpfsNft__AlreadyInitialized();
-error RandomIpfsNft__NeedMoreETHSent();
-error RandomIpfsNft__TransferFailed();
+error YoEl__AlreadyInitialized();
+error YoEl__NeedMoreETHSent();
+error YoEl__TransferFailed();
 
 contract YoEl is ERC721URIStorage, VRFConsumerBaseV2, Ownable {
     // Types
@@ -59,7 +59,7 @@ contract YoEl is ERC721URIStorage, VRFConsumerBaseV2, Ownable {
 
     function requestNft() public payable returns (uint256 requestId) {
         if (msg.value < i_mintFee) {
-            revert RandomIpfsNft__NeedMoreETHSent();
+            revert YoEl__NeedMoreETHSent();
         }
         requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
@@ -88,7 +88,7 @@ contract YoEl is ERC721URIStorage, VRFConsumerBaseV2, Ownable {
 
     function _initializeContract(string[2] memory tokenUris) private {
         if (s_initialized) {
-            revert RandomIpfsNft__AlreadyInitialized();
+            revert YoEl__AlreadyInitialized();
         }
         s_tokenUris = tokenUris;
         s_initialized = true;
@@ -102,7 +102,7 @@ contract YoEl is ERC721URIStorage, VRFConsumerBaseV2, Ownable {
         uint256 amount = address(this).balance;
         (bool success, ) = payable(msg.sender).call{value: amount}("");
         if (!success) {
-            revert RandomIpfsNft__TransferFailed();
+            revert YoEl__TransferFailed();
         }
     }
 
